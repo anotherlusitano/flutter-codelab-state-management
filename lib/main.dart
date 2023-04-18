@@ -15,8 +15,28 @@ void main() {
   );
 }
 
+class AppState {
+  AppState({
+    required this.productList,
+    this.itemsInCart = const <String>{},
+  });
+
+  final List<String> productList;
+  final Set<String> itemsInCart;
+
+  AppState copyWith({
+    List<String>? productList,
+    Set<String>? itemsInCart,
+  }) {
+    return AppState(
+      productList: productList ?? this.productList,
+      itemsInCart: itemsInCart ?? this.itemsInCart,
+    );
+  }
+}
+
 class MyStorePage extends StatefulWidget {
-  const MyStorePage({Key? key}) : super(key: key);
+  const MyStorePage({super.key});
 
   @override
   MyStorePageState createState() => MyStorePageState();
@@ -62,11 +82,13 @@ class MyStorePageState extends State<MyStorePage> {
                     decoration: InputDecoration(
                       hintText: 'Search Google Store',
                       prefixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: _handleSearch),
+                        icon: const Icon(Icons.search),
+                        onPressed: _handleSearch,
+                      ),
                       suffixIcon: IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: _toggleSearch),
+                        icon: const Icon(Icons.close),
+                        onPressed: _toggleSearch,
+                      ),
                     ),
                   )
                 : null,
@@ -91,7 +113,7 @@ class MyStorePageState extends State<MyStorePage> {
 }
 
 class ShoppingCartIcon extends StatefulWidget {
-  const ShoppingCartIcon({Key? key}) : super(key: key);
+  const ShoppingCartIcon({super.key});
 
   @override
   ShoppingCartIconState createState() => ShoppingCartIconState();
@@ -142,7 +164,7 @@ class ShoppingCartIconState extends State<ShoppingCartIcon> {
 }
 
 class ProductListWidget extends StatefulWidget {
-  const ProductListWidget({Key? key}) : super(key: key);
+  const ProductListWidget({super.key});
 
   @override
   ProductListWidgetState createState() => ProductListWidgetState();
@@ -196,12 +218,12 @@ class ProductListWidgetState extends State<ProductListWidget> {
 
 class ProductTile extends StatelessWidget {
   const ProductTile({
-    Key? key,
+    super.key,
     required this.product,
     required this.purchased,
     required this.onAddToCart,
     required this.onRemoveFromCart,
-  }) : super(key: key);
+  });
   final Product product;
   final bool purchased;
   final VoidCallback onAddToCart;
@@ -243,15 +265,15 @@ class ProductTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20),
             child: OutlinedButton(
-              child: purchased
-                  ? const Text('Remove from cart')
-                  : const Text('Add to cart'),
               style: ButtonStyle(
                 foregroundColor:
                     MaterialStateProperty.resolveWith(getButtonColor),
                 side: MaterialStateProperty.resolveWith(getButtonSide),
               ),
               onPressed: purchased ? onRemoveFromCart : onAddToCart,
+              child: purchased
+                  ? const Text('Remove from cart')
+                  : const Text('Add to cart'),
             ),
           ),
           Image.network(product.pictureURL),
@@ -260,6 +282,7 @@ class ProductTile extends StatelessWidget {
     );
   }
 }
+
 // The code below is for the dummy server, and you should not need to modify it
 // in this workshop.
 
