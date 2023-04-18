@@ -120,16 +120,19 @@ class MyStorePageState extends State<MyStorePage> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
-  void _toggleSearch() {
+  void _toggleSearch(BuildContext context) {
     setState(() {
       _inSearch = !_inSearch;
     });
-
+    AppStateWidget.of(context).setProductList(Server.getProductList());
     _controller.clear();
   }
 
-  void _handleSearch() {
+  void _handleSearch(BuildContext context) {
     _focusNode.unfocus();
+    final String filter = _controller.text;
+    AppStateWidget.of(context)
+        .setProductList(Server.getProductList(filter: filter));
   }
 
   @override
@@ -147,16 +150,16 @@ class MyStorePageState extends State<MyStorePage> {
                     autofocus: true,
                     focusNode: _focusNode,
                     controller: _controller,
-                    onSubmitted: (_) => _handleSearch(),
+                    onSubmitted: (_) => _handleSearch(context),
                     decoration: InputDecoration(
                       hintText: 'Search Google Store',
                       prefixIcon: IconButton(
                         icon: const Icon(Icons.search),
-                        onPressed: _handleSearch,
+                        onPressed: () => _handleSearch(context),
                       ),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.close),
-                        onPressed: _toggleSearch,
+                        onPressed: () => _toggleSearch(context),
                       ),
                     ),
                   )
@@ -164,7 +167,7 @@ class MyStorePageState extends State<MyStorePage> {
             actions: [
               if (!_inSearch)
                 IconButton(
-                  onPressed: _toggleSearch,
+                  onPressed: () => _toggleSearch(context),
                   icon: const Icon(Icons.search, color: Colors.black),
                 ),
               const ShoppingCartIcon(),
