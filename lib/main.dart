@@ -7,10 +7,12 @@ final GlobalKey<ProductListWidgetState> productList =
 
 void main() {
   runApp(
-    const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Store',
-      home: MyStorePage(),
+    const AppStateWidget(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Store',
+        home: MyStorePage(),
+      ),
     ),
   );
 }
